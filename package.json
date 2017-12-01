@@ -1,0 +1,24 @@
+{
+  "name": "fasttest",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "codestyle": "mocha --require babel-core/register --watch test.js",
+    "perf": "babel-node perf.js",
+    "start": "babel-node index.js",
+    "test": "mocha --require babel-core/register --watch days/*.spec.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "benchmark": "^2.1.4",
+    "chai": "^4.1.2",
+    "mocha": "^4.0.1",
+    "prettier": "^1.8.2"
+  }
+}
