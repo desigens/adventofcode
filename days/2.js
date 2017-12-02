@@ -31,6 +31,28 @@ export function checksum(input) {
   }, 0);
 }
 
+const testInput2 = `5	9	2	8
+9	4	7	3
+3	8	6	5`;
+
+export function checksum2(input) {
+  console.log(input);
+  const rows = input.split("\n");
+  return rows.reduce((sum, i) => {
+    const nums = i.split("\t").map(i => parseInt(i, 10));
+    nums.forEach(n => {
+      nums.forEach(m => {
+        if (n !== m && n % m === 0) {
+          sum += n / m;
+        }
+      });
+    });
+    return sum;
+  }, 0);
+}
+
 assert.equal(checksum(testInput), 18);
+assert.equal(checksum2(testInput2), 9);
 
 console.log("Checksum result:", checksum(input));
+console.log("Checksum 2 result:", checksum2(input));
