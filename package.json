@@ -7,7 +7,9 @@
     "codestyle": "mocha --require babel-core/register --watch test.js",
     "perf": "babel-node perf.js",
     "start": "babel-node index.js",
-    "test": "mocha --require babel-core/register --watch days/*.spec.js"
+    "test": "mocha --require babel-core/register --watch days/*.spec.js",
+    "day": "nodemon -x babel-node",
+    "day:2": "npm run day -- days/2.js"
   },
   "keywords": [],
   "author": "",
@@ -19,6 +21,7 @@
     "benchmark": "^2.1.4",
     "chai": "^4.1.2",
     "mocha": "^4.0.1",
+    "nodemon": "^1.12.1",
     "prettier": "^1.8.2"
   }
 }
