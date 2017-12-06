@@ -115,6 +115,115 @@ assert.equal(getStepsFromSquareToCenter(1025), 32);
 
 console.log("Steps:", getStepsFromSquareToCenter(289326));
 
+function fill(find, max = 10) {
+
+    let ok;
+
+    let isFirstInDouble = true;
+    let doubleValue = 1;
+    const sides = [];
+
+    /**
+     * Generates sequense of sides lengths: 1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,11,11
+     */
+    for (let i = 1; i <= max; i++) {
+        if (isFirstInDouble) {
+            sides.push(doubleValue);
+        } else {
+            sides.push(doubleValue++);
+        }
+        isFirstInDouble = !isFirstInDouble;
+    }
+
+    const sums = [''];
+    let i = 1;
+    let d = -2;
+
+    sides.forEach((sideLength) => {
+        Array.from({length: sideLength}).forEach((empty, indexInSide) => {
+
+            const isFirstInSide = indexInSide === 0;
+            const isSecondInSide = indexInSide === 1;
+            const isLastInSide = indexInSide === sideLength - 1;
+
+            // DEBUG
+            // indexInSide === 0 && console.log('');
+            // console.log(
+            //     `[${i}]`,
+            //
+            //     `[${indexInSide}]`,
+            //
+            //     // `[${group}]`,
+            //     `[${isFirstInDouble ? '1st' : '2nd'} group of ${sideLength}s]`,
+            //
+            //     // 1 & 2
+            //     (isFirstInSide && d<=0) ? `F SUM [-1] END` : '',
+            //     (isLastInSide && d<=0 && !isFirstInSide) ? `S SUM [-1] END` : '',
+            //
+            //     // 3 and more
+            //
+            //     // FIRST
+            //     (d>0 && isFirstInSide) ? `   F SUM [-1][-${d}] END` : '',
+            //
+            //     // SECOND
+            //     (d>0 && sideLength<=2 && isSecondInSide) ? ` S SUM [-1][-2][-${d - 1}] END` : '',
+            //     (d>0 && sideLength>2 && isSecondInSide) ? ` S SUM [-1][-2][-${d - 2}][-${d - 1}] END` : '',
+            //
+            //     // MIDDLE
+            //     (d>0 && !isFirstInSide && !isSecondInSide && !isLastInSide) ? `M SUM [-1][-${d - 2}][-${d - 1}][-${d}] END` : '',
+            //
+            //     // LAST
+            //     (d>0 && !isSecondInSide && isLastInSide) ? `L SUM [-1][-${d - 1}][-${d}] END` : '',
+            //
+            // );
+
+            // 1 & 2
+
+            if (d<=0) {
+                sums[i] = sums[i - 1] || 1;
+            }
+
+            // 3 and more
+
+            // FIRST
+            if (d>0 && isFirstInSide) {
+                sums[i] = sums[i - 1] + sums[i - d];
+            }
+
+            // SECOND
+            if (d>0 && sideLength<=2 && isSecondInSide) {
+                sums[i] = sums[i - 1] + sums[i - 2] + sums[i - (d - 1)];
+            }
+            if (d>0 && sideLength>2 && isSecondInSide) {
+                sums[i] = sums[i - 1] + sums[i - 2] + sums[i - (d - 2)] + sums[i - (d - 1)];
+            }
+
+            // MIDDLE
+            if (d>0 && !isFirstInSide && !isSecondInSide && !isLastInSide) {
+                sums[i] = sums[i - 1] + sums[i - (d - 2)] + sums[i - (d - 1)] + sums[i - (d)];
+            }
+
+            // LAST
+            if (d>0 && !isSecondInSide && isLastInSide) {
+                sums[i] = sums[i - 1] + sums[i - (d - 1)] + sums[i - (d)];
+            }
+
+            if (sums[i] >= find && !ok) {
+                ok = true;
+                console.log('NEXT VALUE', sums[i]);
+            }
+
+            if (isFirstInSide) {
+                d = d + 2;
+            }
+
+            i++;
+        });
+    });
+}
+
+fill(289326, 20); // 295229
+
 /*
                             57
 37  36  35  34  33  32  31  56
