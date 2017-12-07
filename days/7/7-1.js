@@ -36,22 +36,51 @@ const input = fs.readFileSync(path.join(__dirname, "./input.txt"), "utf-8");
 
 const rows = input.split('\n');
 
-const tree = {};
+const parents = {};
+const children = {};
 const els = [];
+const weights = {};
 
 rows.forEach(row => {
 	const el = row.split(' ')[0];
 	if (row.indexOf('-> ') > -1) {
-		const children = row.split('-> ')[1].split(', ');
-		children.forEach(child => {
-			tree[child] = el;
+		children[el] = row.split('-> ')[1].split(', ');
+		children[el].forEach(child => {
+			parents[child] = el;
 		});
 	}
 	els.push(el);
+	weights[el] = parseInt(row.substr(row.indexOf('(') + 1, row.indexOf(')') -  row.indexOf('(') - 1));
 });
 
+let root;
 els.forEach(el => {
-	if (!tree[el]) {
-		console.log(`NO PARENT FOR: ${el}`)
+	if (!parents[el]) {
+		root = el;
+		console.log(`NO PARENT FOR: ${el} (IS ROOT)`)
 	}
 });
+
+getNodeWeight(root);
+
+function getNodeWeight(el) {
+	if (!children[el]) {
+		return weights[el];
+	} else {
+		const childrenWeights = children[el].map(child => getNodeWeight(child));
+		if (!isArrayOfEquals(childrenWeights)) {
+			console.log(`NODE ${el} HAS DISBALANCED CHILDREN (${childrenWeights})`)
+		}
+		return childrenWeights.reduce((s, i) => s + i, weights[el])
+	}
+}
+
+function isArrayOfEquals(arr) {
+	let e;
+	let res = true;
+	arr.forEach(a => {
+		if (e && a !== e) res = false;
+		e = a;
+	});
+	return res;
+}
