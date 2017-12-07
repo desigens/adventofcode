@@ -9,18 +9,18 @@ const hash = {};
 // While hash not contains state
 while (!hash[arr.join(' ')]) {
 
-	// Set hash key true
-	hash[arr.join(' ')] = true;
+	// Set hash key with step counter value
+	hash[arr.join(' ')] = counter;
+
+	// Do Routine
+	routine();
 
 	// Increase step counter
 	counter++;
-
-	// Do Routine
-	routine()
 }
 
-// If contains return step counter
-console.log(counter);
+console.log('REPEAT FOUND ON STEP:', counter);
+console.log('LOOP SIZE:', counter - hash[arr.join(' ')]);
 
 // Routine
 function routine() {
