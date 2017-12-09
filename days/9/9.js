@@ -7,6 +7,7 @@ const input = fs.readFileSync(path.join(__dirname, "./input.txt"), "utf-8");
 function getScore(stream) {
   let groupsCounter = 0;
   let groupsScore = 0;
+  let charsInGarbageCounter = 0;
   const groupStack = [];
   const garbageStack = [];
   let cancelFlag = false;
@@ -26,6 +27,8 @@ function getScore(stream) {
         // console.log(char, "in garbage");
         if (char === ">") {
           garbageStack.pop();
+        } else if (!cancelFlag) {
+          charsInGarbageCounter++;
         }
       } else {
         switch (char) {
@@ -50,7 +53,8 @@ function getScore(stream) {
 
   return {
     groupsCounter,
-    groupsScore
+    groupsScore,
+    charsInGarbageCounter
   };
 }
 
@@ -71,5 +75,13 @@ assert.equal(getScore("{<a>,<a>,<a>,<a>}").groupsScore, 1);
 assert.equal(getScore("{{<ab>},{<ab>},{<ab>},{<ab>}}").groupsScore, 9);
 assert.equal(getScore("{{<!!>},{<!!>},{<!!>},{<!!>}}").groupsScore, 9);
 assert.equal(getScore("{{<a!>},{<a!>},{<a!>},{<ab>}}").groupsScore, 3);
+
+assert.equal(getScore("<>").charsInGarbageCounter, 0);
+assert.equal(getScore("<random characters>").charsInGarbageCounter, 17);
+assert.equal(getScore("<<<<>").charsInGarbageCounter, 3);
+assert.equal(getScore("<{!>}>").charsInGarbageCounter, 2);
+assert.equal(getScore("<!!>").charsInGarbageCounter, 0);
+assert.equal(getScore("<!!!>>").charsInGarbageCounter, 0);
+assert.equal(getScore('<{o"i!a,<{i<a>').charsInGarbageCounter, 10);
 
 console.log(getScore(input));
