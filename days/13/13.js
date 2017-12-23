@@ -16,24 +16,40 @@ const input =
       return sum;
     }, []);
 
-let sum = 0;
+console.log(
+  "SEVERITY SUM:",
+  run(0).reduce((sum, i) => (sum += sum + i * input[i]), 0)
+);
 
-for (let picosecond = 0; picosecond < input.length; picosecond++) {
-  const layerIndex = picosecond;
-  const layerRange = input[picosecond];
-  if (!isNaN(layerRange)) {
-    const layerPositionAtCurrentPicosecond = firewallLayerPositionAtPicosecond(
-      layerRange,
-      picosecond
-    );
-    if (layerPositionAtCurrentPicosecond === 0) {
-      // console.log("CAUGTH AT:", picosecond);
-      sum = sum + layerRange * layerIndex;
+/**
+ * @param {number} delay
+ * @return {number[]}
+ */
+function run(delay) {
+  let isCaughtAt = [];
+  for (let picosecond = 0; picosecond < input.length; picosecond++) {
+    const layerIndex = picosecond;
+    const layerRange = input[picosecond];
+    if (!isNaN(layerRange)) {
+      const layerPositionAtCurrentPicosecond = firewallLayerPositionAtPicosecond(
+        layerRange,
+        picosecond + delay
+      );
+      if (layerPositionAtCurrentPicosecond === 0) {
+        // console.log("CAUGTH AT:", picosecond);
+        isCaughtAt.push(picosecond);
+      }
     }
   }
+  return isCaughtAt;
 }
 
-console.log("SEVERITY SUM:", sum);
+let delay = 0;
+while (run(delay).length > 0) {
+  delay++;
+}
+
+console.log("SUCCESS DELAY:", delay);
 
 /**
  * @param {number} layerRange
